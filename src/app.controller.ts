@@ -4,6 +4,7 @@ import {
   Get,
   Logger,
   Post,
+  Query,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
@@ -32,10 +33,12 @@ export class AppController {
 
   @Post('categories')
   @UsePipes(ValidationPipe)
-  async createCategory(@Body() createCategoryDto: CreateCategoriesDto) {
-    return await this.clientAdiminBack.emit(
-      'create-category',
-      createCategoryDto,
-    );
+  createCategory(@Body() createCategoryDto: CreateCategoriesDto) {
+    this.clientAdiminBack.emit('create-category', createCategoryDto);
+  }
+
+  @Get('categories')
+  queryCategories(@Query('categoryId') _id: string) {
+    return this.clientAdiminBack.send('query-categories', _id ? _id : '');
   }
 }
